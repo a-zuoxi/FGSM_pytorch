@@ -6,7 +6,7 @@ import numpy as np
 class FGSM(nn.Module):
     def __init__(self,model):
         super().__init__()
-        self.model=model#必须是pytorch的model
+        self.model=model
         self.device=torch.device("cuda" if (torch.cuda.is_available()) else "cpu")
     def generate(self,x,**params):
         self.parse_params(**params)
@@ -14,7 +14,6 @@ class FGSM(nn.Module):
         if self.rand_init:
             x_new = x + torch.Tensor(np.random.uniform(-self.eps, self.eps, x.shape)).type_as(x).cuda()
 
-        # get the gradient of x
         x_new=Variable(x_new,requires_grad=True)
         loss_func = nn.CrossEntropyLoss()
         preds = self.model(x_new)
